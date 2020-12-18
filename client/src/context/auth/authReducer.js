@@ -48,6 +48,6 @@ export default (state, action) => {
       };
 
     default:
-      return state;
+      throw new Error(`Unsupported type of: ${action.type}`);
   }
 };

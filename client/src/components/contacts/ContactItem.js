@@ -1,16 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import ContactContext from '../../context/contact/contactContext';
+import {
+  useContacts,
+  deleteContact,
+  setCurrent,
+  clearCurrent,
+} from '../../context/contact/ContactState';
 
 const ContactItem = ({ contact }) => {
-  const contactContext = useContext(ContactContext);
-  const { deleteContact, setCurrent, clearCurrent } = contactContext;
+  // we just need the contact dispatch without state.
+  const contactDispatch = useContacts()[1];
 
-  const { id, name, email, phone, type } = contact;
+  const { _id, name, email, phone, type } = contact;
 
   const onDelete = () => {
-    deleteContact(id);
-    clearCurrent(contact);
+    deleteContact(contactDispatch, _id);
+    clearCurrent(contactDispatch);
   };
 
   return (
@@ -20,11 +25,11 @@ const ContactItem = ({ contact }) => {
         <span
           style={{ float: 'right' }}
           className={
-            'capitalize badge ' +
+            'badge ' +
             (type === 'professional' ? 'badge-success' : 'badge-primary')
           }
         >
-          {type}
+          {type.charAt(0).toUpperCase() + type.slice(1)}
         </span>
       </h3>
       <ul className='list'>
@@ -42,7 +47,7 @@ const ContactItem = ({ contact }) => {
       <p>
         <button
           className='btn btn-dark btn-sm'
-          onClick={() => setCurrent(contact)}
+          onClick={() => setCurrent(contactDispatch, contact)}
         >
           Edit
         </button>

@@ -1,25 +1,24 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AlertContext from '../../context/alert/alertContext';
-import AuthContext from '../../context/auth/authContext';
+import { useAuth, clearErrors, register } from '../../context/auth/AuthState';
 
 const Register = (props) => {
   const alertContext = useContext(AlertContext);
-  const authContext = useContext(AuthContext);
+  const [authState, authDispatch] = useAuth();
+  const { error, isAuthenticated } = authState;
 
   const { setAlert } = alertContext;
-  const { register, error, clearErrors, isAuthenticated } = authContext;
 
   useEffect(() => {
     if (isAuthenticated) {
       props.history.push('/');
     }
 
-    if (error) {
+    if (error === 'User already exists') {
       setAlert(error, 'danger');
-      clearErrors();
+      clearErrors(authDispatch);
     }
-    // eslint-disable-next-line
-  }, [error, isAuthenticated, props.history]);
+  }, [error, isAuthenticated, props.history, setAlert, authDispatch]);
 
   const [user, setUser] = useState({
     name: '',
@@ -39,7 +38,7 @@ const Register = (props) => {
     } else if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({
+      register(authDispatch, {
         name,
         email,
         password,
@@ -56,6 +55,7 @@ const Register = (props) => {
         <div className='form-group'>
           <label htmlFor='name'>Name</label>
           <input
+            id='name'
             type='text'
             name='name'
             value={name}
@@ -66,6 +66,7 @@ const Register = (props) => {
         <div className='form-group'>
           <label htmlFor='email'>Email Address</label>
           <input
+            id='email'
             type='email'
             name='email'
             value={email}
@@ -76,6 +77,7 @@ const Register = (props) => {
         <div className='form-group'>
           <label htmlFor='password'>Password</label>
           <input
+            id='password'
             type='password'
             name='password'
             value={password}
@@ -87,6 +89,7 @@ const Register = (props) => {
         <div className='form-group'>
           <label htmlFor='password2'>Confirm Password</label>
           <input
+            id='password2'
             type='password'
             name='password2'
             value={password2}

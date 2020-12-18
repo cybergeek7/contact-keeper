@@ -1,15 +1,19 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import AuthContext from '../../context/auth/authContext';
+import { useAuth, logout } from '../../context/auth/AuthState';
+import { useContacts, clearContacts } from '../../context/contact/ContactState';
 
 const Navbar = ({ title, icon }) => {
-  const authContext = useContext(AuthContext);
+  const [authState, authDispatch] = useAuth();
+  const { isAuthenticated, user } = authState;
 
-  const { isAuthenticated, logout, user } = authContext;
+  // We just need the contact dispatch without state.
+  const contactDispatch = useContacts()[1];
 
   const onLogout = () => {
-    logout();
+    logout(authDispatch);
+    clearContacts(contactDispatch);
   };
 
   const authLinks = (

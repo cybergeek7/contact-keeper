@@ -6,7 +6,7 @@ const User = require('../models/User');
 const Contact = require('../models/Contact');
 
 // @route   GET api/contacts
-// @desc    Get all users contacts
+// @desc    Get all user's contacts
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {

@@ -1,33 +1,26 @@
-import React, { useContext, useRef, useEffect } from 'react';
-import ContactContext from '../../context/contact/contactContext';
+import React from 'react';
+import contactContext from '../../context/contact/contactContext';
+import {
+  useContacts,
+  filterContacts,
+  clearFilter,
+} from '../../context/contact/ContactState';
 
 const ContactFilter = () => {
-  const contactContext = useContext(ContactContext);
-  const { filterContacts, clearFilter, filtered } = contactContext;
-  const text = useRef('');
-
-  useEffect(() => {
-    if (filtered === null) {
-      text.current.value = '';
-    }
-  });
+  // We just need the contact dispatch without state.
+  const contactDispatch = useContacts()[1];
 
   const onChange = (e) => {
-    if (text.current.value !== '') {
-      filterContacts(e.target.value);
+    if (e.target.value !== '') {
+      filterContacts(contactDispatch, e.target.value);
     } else {
-      clearFilter();
+      clearFilter(contactDispatch);
     }
   };
 
   return (
-    <form>
-      <input
-        ref={text}
-        type='text'
-        placeholder='Filter Contacts...'
-        onChange={onChange}
-      />
+    <form onSubmit={(e) => e.preventDefault()}>
+      <input type='text' placeholder='Filter Contacts...' onChange={onChange} />
     </form>
   );
 };
