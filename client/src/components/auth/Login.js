@@ -1,10 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AlertContext from '../../context/alert/alertContext';
-import AuthState, {
-  useAuth,
-  clearErrors,
-  login,
-} from '../../context/auth/AuthState';
+import { useAuth, clearErrors, login } from '../../context/auth/AuthState';
 
 const Login = (props) => {
   const alertContext = useContext(AlertContext);
