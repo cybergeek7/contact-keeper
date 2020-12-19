@@ -101,6 +101,8 @@ export const clearFilter = (dispatch) => {
   dispatch({ type: CLEAR_FILTER });
 };
 
+// ContactState provider component
+
 const ContactState = (props) => {
   const initialState = {
     contacts: null,
